@@ -10,11 +10,11 @@ import java.util.Arrays;
  * @author Megan
  *
  */
-public class MaxHeap <AnyType extends Comparable<? super AnyType>>{
+public class MaxHeap <T extends Comparable<? super T>>{
 	
 	private static final int DEFAULT_SIZE = 10; // default number of nodes in da heap
 	private int size; // number of elements in heap
-	private AnyType[] array; // the heap array
+	private T[] array; // the heap array
 	
 	/**
 	 * construct the binary heap with a default size.
@@ -27,11 +27,11 @@ public class MaxHeap <AnyType extends Comparable<? super AnyType>>{
 	 * construct binary heap.
 	 */
 	public MaxHeap(int capacity){
-		array = (AnyType[]) new Comparable[capacity + 1];	
+		array = (T[]) new Comparable[capacity + 1];	
 		size = 0;
 	}
 
-	public void insert (AnyType x){
+	public void insert (T x){
 		// will resize the array if needed
 		if(isFull())
 			array = this.resize();
@@ -58,18 +58,18 @@ public class MaxHeap <AnyType extends Comparable<? super AnyType>>{
 	}
 	
 	//takes the root since this is a max heap
-	public AnyType findMax(){
+	public T findMax(){
 		if(isEmpty())
 			return null;
 		return array[0];
 	}
 	
 	//delete max from the heap
-	public AnyType deleteMax(){
+	public T deleteMax(){
 		if(isEmpty())
 			return null;
 		
-		AnyType maxItem = findMax();
+		T maxItem = findMax();
 		array[0] = array[size--];
 		bubbleDown(0);
 		
@@ -98,6 +98,7 @@ public class MaxHeap <AnyType extends Comparable<? super AnyType>>{
 	}
 	
 	//prints first three values in heap
+	//seems okay
 	public void printImmediateOptions(){
 		for(int i = 0; i < 3; i++){
 			System.out.println(array[i]);
@@ -113,7 +114,7 @@ public class MaxHeap <AnyType extends Comparable<? super AnyType>>{
 	private void bubbleDown(int position){
 		int child = 0;
 		
-		AnyType temp = array[position];
+		T temp = array[position];
 		
 		for(; position * 2 < size; position = child){
 			child = position * 2;
@@ -135,7 +136,7 @@ public class MaxHeap <AnyType extends Comparable<? super AnyType>>{
 	*/
 	
 	// resizes the array
-	private AnyType[] resize(){
+	private T[] resize(){
 		return Arrays.copyOf(array, array.length * 2);
 	}
 }

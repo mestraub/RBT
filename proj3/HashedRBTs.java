@@ -1,20 +1,24 @@
 /**
+ * printHashCounts
+ * fileReader
+ * retreiveHashedRBTat
  * 
  */
 package proj3;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * @author Megan
  *
  */
-public class HashedRBTs <AnyType>{
+public class HashedRBTs <T>{
 
 	// create ArrayList called table
-	
+	private ArrayList<RedBlackTree<Partial>> table;
 	/**
 	 * A constructor that accepts any size for the hashed table.
 	 * 
@@ -22,6 +26,12 @@ public class HashedRBTs <AnyType>{
 	 */
 	public HashedRBTs(int size){
 		//instantiate the table
+		table = new ArrayList<RedBlackTree<Partial>>(size);
+		
+		for(int i = 0; i < size; i++){
+			RedBlackTree<Partial> tree = new RedBlackTree<Partial>();
+			table.add(i,tree);
+		}
 	}
 	
 	/**
@@ -40,33 +50,81 @@ public class HashedRBTs <AnyType>{
 		String str = " ";
 		char letter = 'z';
 		int index;
+		int frequency;
+		String word = " ";
+		Partial p;
+		Node n;
 		
 		try {
 			Scanner scanFile = new Scanner(textFile); // reads the input file
 			
-			while (scanFile.hasNext()){
-				str = scanFile.next();
+			while (scanFile.hasNextLine()){
+				str = scanFile.nextLine();
+
+				
+				str = str.replaceAll("[\\W]|frequency|word|Node|Empty tree", "");	//removes any unwanted characters
 	
-				str = str.replaceAll("\\W|[0-9]", "");	//removes any unwanted characters
+				word = str.replaceAll("[0-9]|\\s", "");
+				frequency = Integer.parseInt(str.replaceAll("[a-zA-Z]|\\s", ""));
 				
 				if (str.length() > 0){
-					letter = str.charAt(0);
+					//letter = str.charAt(0);
 					
 					/*
 					 * 90 and 65 are the ASCII characters of the upper case letters
 					 * 90 minus 65 is 25 the letter Z
 					 * 65 minus 65 is 0 the letter A
 					 */					
+					n = new Node(word, frequency);
+					p = new Partial(n);
 					
+					System.out.println(" n node in file " + n + "\n");
+
 					if(letter - 65 >= 0 && letter - 65 <= 25){		
 						index = letter - 65;
 						//n = new Node(str);
-						//table.get(index).insert(n);
+					//	table.get(index).insert(p);
+						//if(table.get(index).contains(p))
+						
+						if(!table.get(index).isEmpty()){
+							table.get(index).insert(p);
+						}
+						
+						//table.get(index).contains(p, n);
+					//	System.out.println(str);
+
 					}
 					
 					if(letter - 97 >= 0 && letter - 97 <= 122){
 						index = letter - 97;
+						//System.out.println(str);
+						
+					//	n = new Node(word, frequency);
+					//	p = new Partial(n);
+						
+						if(table.get(index).isEmpty()){
+							
+							table.get(index).insert(p);
+							
+							System.out.println("p partial in file " + p + "\n");
+
+							System.out.println("p partial in file, getting word: " + p.getWord() + "\n");
+						}else if (!table.get(index).isEmpty() && table.get(index).contains(p)){
+							table.get(index).findNode(p).insertNodeIntoHeap(n);
+							System.out.println("p partial in file contains " + p + "\n");
+
+							System.out.println("p partial in file contains, getting word: " + p.getWord() + "\n");
+						}else {
+							table.get(index).insert(p);
+							System.out.println("p partial in file else " + p + "\n");
+
+							System.out.println("p partial in file else, getting word: " + p.getWord() + "\n");
+						}
+						//table.get(index).contains(p, n);
+						//p.printImmediateOptions();
+					//	table.get(index).insert(p);
 					}
+					
 				}				
 			}
 			scanFile.close();		
@@ -75,6 +133,10 @@ public class HashedRBTs <AnyType>{
 			System.out.println("File not found.");
 			e.printStackTrace();
 		}// end catch
+		/*
+		for(int i = 0; i < table.size(); i++)
+			table.get(i).printTree();
+			*/
 	}
 	
 	/**
@@ -82,15 +144,32 @@ public class HashedRBTs <AnyType>{
 	 * 
 	 * @param index
 	 */
-	public void retreiveHashedRBTat(int index){
-		
+	public RedBlackTree<Partial> retreiveHashedRBTat(int index){
+		return table.get(index);
 	}
 	
 	/**
 	 * this is a grading and debugging tool; should run in O(n) time
 	 */
 	public void printHashCountResults(){
-		
+		/*
+		for (int i = 0; i < table.size(); i++){
+			System.out.print("This tree starts with ");
+			table.get(i).printRoot();
+			System.out.println("");
+		}
+		*/
+		/*
+		for(int i = 0; i < table.size(); i++){
+			//System.out.println(i);
+			System.out.println(i);
+			//table.get(i).printRoot();
+			//System.out.println("");
+			table.get(i).printTree();
+		}
+		*/
+		System.out.println(25);
+		table.get(25).printTree();
 	}
 	
 	
