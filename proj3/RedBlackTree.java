@@ -18,9 +18,9 @@ package proj3;
  */
 public class RedBlackTree <T extends Comparable<? super T>>{
 	
-	private RedBlackNode<T> root;
+	private RedBlackNode<T> pointer;
 	private RedBlackNode<T> nullNode;
-	
+
 	private static final int BLACK = 1;
 	private static final int RED = 0;
 	
@@ -30,15 +30,17 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 	private RedBlackNode<T> greatGrandParent;
 	
 	public RedBlackTree(){
+		
 		nullNode = new RedBlackNode<T>(null);
-		nullNode.leftChild = nullNode.rightChild = nullNode;
-		root = new RedBlackNode<T>(null);
-		root.leftChild = root.rightChild = nullNode;
+		nullNode.left = nullNode.right = nullNode;
+		
+		pointer = new RedBlackNode<T>(null);
+		pointer.left = pointer.right = nullNode;
 	}
 	
 	//test if tree is empty
 	public boolean isEmpty(){
-		return root.rightChild == nullNode;
+		return pointer.right == nullNode;
 	}
 	
 	
@@ -59,54 +61,58 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 	}
 */
 	
-	public boolean contains(T x){
+	public boolean contains(Partial x){
 		
 		System.out.println("x in contains: before statements " + x);
-		Partial p = (Partial) x;
 		
-		return root != nullNode && contains(p, root.rightChild);
+		return findNode(x) != null;
 	}
-
+/*
     private boolean contains(Partial x, RedBlackNode<T> n)
     {
         if (n != nullNode)
         {
-            contains(x, n.leftChild);
-            if(x.compareTo(n.data) == 0)
+            contains(x, n.left);
+            if(x.compareTo(n.item) == 0)
             {
                 return true;
             }
-            contains(x, n.rightChild);
+            contains(x, n.right);
         }
         return false;
     }
-	
+	/*
 	public T findNode(T x){
-		return findNode(x, root.rightChild);
+		return findNode(x, pointer.right);
 	}
-
-	private T findNode(T x, RedBlackNode<T> t){
-		/*
-		if (t ==  nullNode)
-			return null;
-		else if (compare (x , t) > 0)
-			return findNode(x, t.leftChild);
-		else if (compare(x, t) < 0)
-			return findNode(x, t.rightChild);
-		else
-			return t.data;
-			*/
+	*/
+	public T findNode(Partial x){
 		
+		nullNode.item = (T)x;
+		current = pointer.right;
+		
+		for (;;){
+		if (current == nullNode)
+			return null;
+		else if (x.compareTo(current.item) > 0)
+			current = current.left;
+		else if (x.compareTo(current.item) < 0)
+			current = current.right;
+		else
+			return current.item;
+		}
+		/*
 		Partial p = (Partial)x;
 		
 		if (t != nullNode){
-			findNode(x, t.leftChild);
+			findNode(x, t.left);
 			if (p.compareTo(x) == 0){
-				return t.data;
+				return t.item;
 			}
-			findNode(x, t.rightChild);
+			findNode(x, t.right);
 		}
 		return null;
+		*/
 	}
 	/*
     private T findNode(T x, RedBlackNode<T> n)
@@ -126,18 +132,18 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 */
 	//insert into the tree
 	public void insert(T thing){
-		current = parent = grandParent = root;
-		nullNode.data = thing;
+		current = parent = grandParent = pointer;
+		nullNode.item = thing;
 		
 		while(compare(thing, current) != 0){
 			greatGrandParent = grandParent;
 			grandParent = parent;
 			parent = current;
 			
-			current = compare(thing, current) < 0 ? current.leftChild : current.rightChild;
+			current = compare(thing, current) < 0 ? current.left : current.right;
 			
 			//check if kids are red, then fix
-			if(current.leftChild.color == RED && current.rightChild.color == RED)
+			if(current.left.color == RED && current.right.color == RED)
 				reorientTree(thing);
 		}
 		
@@ -148,9 +154,9 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 		
 		//attach to parent
 		if (compare(thing, parent) < 0)
-			parent.leftChild = current;
+			parent.left = current;
 		else
-			parent.rightChild = current;
+			parent.right = current;
 		
 		reorientTree(thing);
 	}
@@ -160,8 +166,8 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 	private void reorientTree(T thing){
 		//color flip
 		current.color = RED;
-		current.leftChild.color = BLACK;
-		current.rightChild.color = BLACK;
+		current.left.color = BLACK;
+		current.right.color = BLACK;
 		
 		if (parent.color == RED){ // need to rotate
 			grandParent.color = RED;
@@ -172,44 +178,44 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 				current.color = BLACK;
 			}
 			
-			root.rightChild.color = BLACK; // makes root black
+			pointer.right.color = BLACK; // makes root black
 		}
 	}
 	
 	private RedBlackNode<T> rotate(T thing, RedBlackNode<T> parent){
 		if(compare(thing, parent) < 0){
-			return parent.leftChild = compare(thing, parent.leftChild) < 0 ?
-					rotateWithLeftChild (parent.leftChild) :
-					rotateWithRightChild (parent.leftChild);
+			return parent.left = compare(thing, parent.left) < 0 ?
+					rotateWithLeftChild (parent.left) :
+					rotateWithRightChild (parent.left);
 		}
 		else {
-			return parent.rightChild = compare(thing, parent.rightChild) < 0 ?
-					rotateWithLeftChild(parent.rightChild) :
-					rotateWithRightChild(parent.rightChild);
+			return parent.right = compare(thing, parent.right) < 0 ?
+					rotateWithLeftChild(parent.right) :
+					rotateWithRightChild(parent.right);
 		}
 	}
 	
 	//compares data and x.data to see whichis bigger?
 	private int compare(T thing, RedBlackNode<T> x){
-		if (x == root)
+		if (x == pointer)
 			return 1;
 		else
-			return thing.compareTo(x.data);
+			return thing.compareTo(x.item);
 	}
 	
 	//rotate tree with left child
 	private RedBlackNode<T> rotateWithLeftChild(RedBlackNode<T> node2){
-		RedBlackNode<T> node1 = node2.leftChild;
-		node2.leftChild = node1.rightChild;
-		node1.rightChild = node2;
+		RedBlackNode<T> node1 = node2.left;
+		node2.left = node1.right;
+		node1.right = node2;
 		return node1;
 	}
 	
 	//rotate tree with right child
 	private RedBlackNode<T> rotateWithRightChild(RedBlackNode<T> node1){
-		RedBlackNode<T> node2 = node1.rightChild;
-		node1.rightChild = node2.leftChild;
-		node2.leftChild = node2;
+		RedBlackNode<T> node2 = node1.right;
+		node1.right = node2.left;
+		node2.left = node2;
 		return node2;
 	}
 	
@@ -218,15 +224,15 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 		if(isEmpty())
 			System.out.println("This tree has no nodes");
 		else
-			printTree(root.rightChild);
+			printTree(pointer.right);
 	}
 	
 	//internal method to print subtree in inroder
 	private void printTree(RedBlackNode<T> x){
 		if(x != nullNode){
-			printTree(x.leftChild);
-			System.out.println(x.data);
-			printTree(x.rightChild);
+			printTree(x.left);
+			System.out.println(x.item);
+			printTree(x.right);
 		}
 	}
 	
@@ -235,14 +241,14 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 		if(isEmpty())
 			System.out.print("The tree is empty.");
 		else
-			System.out.print(root.rightChild.data);
+			System.out.print(pointer.right.item);
 	}
 	
 	private static class RedBlackNode<T>{
 		
-		T data; // data in the node
-		RedBlackNode<T> leftChild; //left chld
-		RedBlackNode<T> rightChild; //right child
+		T item; // data in the node
+		RedBlackNode<T> left; //left chld
+		RedBlackNode<T> right; //right child
 		int color; // of node
 		
 		RedBlackNode(){
@@ -254,14 +260,14 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 		}
 		
 		RedBlackNode(T theData, RedBlackNode<T> leftChild, RedBlackNode<T> rightChild){
-			data = theData;
-			this.leftChild = leftChild;
-			this.rightChild = rightChild;
+			item = theData;
+			left = leftChild;
+			right = rightChild;
 			color = BLACK;
 		}
 		
-		public T getData(){
-			return data;
+		public T getItem(){
+			return item;
 		}
 		
 	}

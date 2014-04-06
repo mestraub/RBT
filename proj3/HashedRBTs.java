@@ -107,17 +107,19 @@ public class HashedRBTs <T>{
 							table.get(index).insert(p);
 							
 							System.out.println("p partial in file " + p + "\n");
-
 							System.out.println("p partial in file, getting word: " + p.getWord() + "\n");
+							
 						}else if (!table.get(index).isEmpty() && table.get(index).contains(p)){
+							
 							table.get(index).findNode(p).insertNodeIntoHeap(n);
+							
 							System.out.println("p partial in file contains " + p + "\n");
-
 							System.out.println("p partial in file contains, getting word: " + p.getWord() + "\n");
 						}else {
+							
 							table.get(index).insert(p);
+							
 							System.out.println("p partial in file else " + p + "\n");
-
 							System.out.println("p partial in file else, getting word: " + p.getWord() + "\n");
 						}
 						//table.get(index).contains(p, n);

@@ -27,7 +27,7 @@ public class MaxHeap <T extends Comparable<? super T>>{
 	 * construct binary heap.
 	 */
 	public MaxHeap(int capacity){
-		array = (T[]) new Comparable[capacity + 1];	
+		array = (T[]) new Comparable[capacity];	
 		size = 0;
 	}
 
@@ -140,21 +140,3 @@ public class MaxHeap <T extends Comparable<? super T>>{
 		return Arrays.copyOf(array, array.length * 2);
 	}
 }
-
-/*
-//position of the parent
-public int parent(int position){
-	return (position - 1)/2;
-}
-
-//position of left child
-public int leftChild(int position){
-	return 2*position + 1;
-}
-
-//position of right child
-public int rightChild (int position){
-	return 2*position + 2;
-}
-*/
-
