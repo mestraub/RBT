@@ -60,67 +60,69 @@ public class HashedRBTs <T>{
 			
 			while (scanFile.hasNextLine()){
 				str = scanFile.nextLine();
-
-				
-				str = str.replaceAll("[\\W]|frequency|word|Node|Empty tree", "");	//removes any unwanted characters
 	
-				word = str.replaceAll("[0-9]|\\s", "");
-				frequency = Integer.parseInt(str.replaceAll("[a-zA-Z]|\\s", ""));
+				str = str.replaceAll("[\\W]|frequency|word|Node|Empty tree", "");	//removes any unwanted characters
 				
 				if (str.length() > 0){
-					//letter = str.charAt(0);
 					
-					/*
-					 * 90 and 65 are the ASCII characters of the upper case letters
-					 * 90 minus 65 is 25 the letter Z
-					 * 65 minus 65 is 0 the letter A
-					 */					
+					letter = str.charAt(0);
+					
+					word = str.replaceAll("[0-9]|\\s", "");
+					frequency = Integer.parseInt(str.replaceAll("[a-zA-Z]|\\s", ""));
+				
 					n = new Node(word, frequency);
 					p = new Partial(n);
 					
-					System.out.println(" n node in file " + n + "\n");
+					//System.out.println(" n node in file " + n + "\n");
 
 					if(letter - 65 >= 0 && letter - 65 <= 25){		
 						index = letter - 65;
-						//n = new Node(str);
-					//	table.get(index).insert(p);
-						//if(table.get(index).contains(p))
-						
-						if(!table.get(index).isEmpty()){
-							table.get(index).insert(p);
-						}
-						
-						//table.get(index).contains(p, n);
-					//	System.out.println(str);
-
-					}
-					
-					if(letter - 97 >= 0 && letter - 97 <= 122){
-						index = letter - 97;
-						//System.out.println(str);
-						
-					//	n = new Node(word, frequency);
-					//	p = new Partial(n);
 						
 						if(table.get(index).isEmpty()){
 							
 							table.get(index).insert(p);
 							
-							System.out.println("p partial in file " + p + "\n");
-							System.out.println("p partial in file, getting word: " + p.getWord() + "\n");
+							//System.out.println("p partial in file " + p + "\n");
+							//System.out.println("p partial in file, getting word: " + p.getWord() + "\n");
 							
 						}else if (!table.get(index).isEmpty() && table.get(index).contains(p)){
 							
 							table.get(index).findNode(p).insertNodeIntoHeap(n);
 							
-							System.out.println("p partial in file contains " + p + "\n");
-							System.out.println("p partial in file contains, getting word: " + p.getWord() + "\n");
+							//System.out.println("p partial in file contains " + p + "\n");
+							//System.out.println("p partial in file contains, getting word: " + p.getWord() + "\n");
 						}else {
 							
 							table.get(index).insert(p);
 							
-							System.out.println("p partial in file else " + p + "\n");
-							System.out.println("p partial in file else, getting word: " + p.getWord() + "\n");
+							//System.out.println("p partial in file else " + p + "\n");
+							//System.out.println("p partial in file else, getting word: " + p.getWord() + "\n");
+						}
+
+					}
+					
+					if(letter - 97 >= 0 && letter - 97 <= 25){
+						index = letter - 71;
+						
+						if(table.get(index).isEmpty()){
+							
+							table.get(index).insert(p);
+							
+							//System.out.println("p partial in file " + p + "\n");
+							//System.out.println("p partial in file, getting word: " + p.getWord() + "\n");
+							
+						}else if (!table.get(index).isEmpty() && table.get(index).contains(p)){
+							
+							table.get(index).findNode(p).insertNodeIntoHeap(n);
+							
+							//System.out.println("p partial in file contains " + p + "\n");
+							//System.out.println("p partial in file contains, getting word: " + p.getWord() + "\n");
+						}else {
+							
+							table.get(index).insert(p);
+							
+							//System.out.println("p partial in file else " + p + "\n");
+							//System.out.println("p partial in file else, getting word: " + p.getWord() + "\n");
 						}
 						//table.get(index).contains(p, n);
 						//p.printImmediateOptions();
@@ -154,24 +156,23 @@ public class HashedRBTs <T>{
 	 * this is a grading and debugging tool; should run in O(n) time
 	 */
 	public void printHashCountResults(){
-		/*
-		for (int i = 0; i < table.size(); i++){
-			System.out.print("This tree starts with ");
-			table.get(i).printRoot();
-			System.out.println("");
-		}
-		*/
-		/*
+		
 		for(int i = 0; i < table.size(); i++){
 			//System.out.println(i);
-			System.out.println(i);
+			//System.out.println(i);
 			//table.get(i).printRoot();
 			//System.out.println("");
-			table.get(i).printTree();
+			
+			if (table.get(i).getRoot() != null){
+				String str = table.get(i).getRoot().toString();
+				str.replaceAll("\\n", " ");
+				System.out.print("This tree starts with " + str + "--> The heap contains:\n");
+				
+				table.get(i).printTree();
+			}	
+			else
+				System.out.println("This tree has no nodes");
 		}
-		*/
-		System.out.println(25);
-		table.get(25).printTree();
 	}
 	
 	

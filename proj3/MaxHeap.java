@@ -106,6 +106,16 @@ public class MaxHeap <T extends Comparable<? super T>>{
 	}
 	
 	//custom toString to print heap in an array
+	/*
+	public String toString(){
+		
+		String str = "\n";
+		
+		for (int i = 0; i < size; i++){
+			str += "[" + (i + 1) + "]" + array[i].toString() + "\n";
+		}
+		return str;
+	}*/
 	public String toString(){
 		return Arrays.toString(array);
 	}
@@ -128,12 +138,6 @@ public class MaxHeap <T extends Comparable<? super T>>{
 		}	
 		array[position] = temp;
 	}
-	
-	/*
-	private void bubbleUp(){
-		int position = this.size;	
-	}
-	*/
 	
 	// resizes the array
 	private T[] resize(){

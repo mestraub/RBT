@@ -43,93 +43,33 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 		return pointer.right == nullNode;
 	}
 	
-	
-/*
-	public void contains(T x, Node n){
-		System.out.println(" x " + x);
-		System.out.println("root " + root.rightChild.data);
-		
-		if (root.rightChild != null && findNode(x) == x){
-			Partial p = (Partial)findNode(x);
-			p.insertNodeIntoHeap(n);
-			System.out.println("in contains find Node area");
-		} else{
-			insert(x);
-			System.out.println("in the else part of contains");
-		}
-		
-	}
-*/
-	
-	public boolean contains(Partial x){
-		
-		System.out.println("x in contains: before statements " + x);
-		
+	//returns true if the thing is there
+	public boolean contains(Partial x){		
 		return findNode(x) != null;
 	}
-/*
-    private boolean contains(Partial x, RedBlackNode<T> n)
-    {
-        if (n != nullNode)
-        {
-            contains(x, n.left);
-            if(x.compareTo(n.item) == 0)
-            {
-                return true;
-            }
-            contains(x, n.right);
-        }
-        return false;
-    }
-	/*
-	public T findNode(T x){
-		return findNode(x, pointer.right);
-	}
-	*/
+	
+	//find stuff in the tree and returns it
 	public T findNode(Partial x){
 		
 		nullNode.item = (T)x;
 		current = pointer.right;
 		
 		for (;;){
-		if (current == nullNode)
-			return null;
-		else if (x.compareTo(current.item) > 0)
-			current = current.left;
-		else if (x.compareTo(current.item) < 0)
-			current = current.right;
-		else
-			return current.item;
+			if (current == nullNode)
+				return null;
+			else if (x.compareTo(current.item) < 0)
+				current = current.left;
+			else if (x.compareTo(current.item) > 0)
+				current = current.right;
+			else
+				return current.item;
 		}
-		/*
-		Partial p = (Partial)x;
-		
-		if (t != nullNode){
-			findNode(x, t.left);
-			if (p.compareTo(x) == 0){
-				return t.item;
-			}
-			findNode(x, t.right);
-		}
-		return null;
-		*/
 	}
-	/*
-    private T findNode(T x, RedBlackNode<T> n)
-    {
-       // System.out.println(n.data);
-        if(n != nullNode)
-        {
-            findNode(x, n.leftChild);
-            if (compare(x, n) == 0)
-            {
-                return n.data;
-            }
-            findNode(x, n.rightChild);
-        }
-        return null;
-    }
-*/
+	
+	public T retreiveIfItContains(Partial x){
+		return findNode(x);
+	}
+	
 	//insert into the tree
 	public void insert(T thing){
 		current = parent = grandParent = pointer;
@@ -239,9 +179,17 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 	//prints the root of the tree
 	public void printRoot(){
 		if(isEmpty())
-			System.out.print("The tree is empty.");
+			System.out.println("The tree is empty.");
 		else
-			System.out.print(pointer.right.item);
+			System.out.println(pointer.right.item);
+	}
+	
+	//prints the root of the tree
+	public T getRoot(){
+		if(isEmpty())
+			return null;
+		else
+			return pointer.right.item;
 	}
 	
 	private static class RedBlackNode<T>{
@@ -250,10 +198,6 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 		RedBlackNode<T> left; //left chld
 		RedBlackNode<T> right; //right child
 		int color; // of node
-		
-		RedBlackNode(){
-			this(null, null, null);
-		}
 		
 		RedBlackNode(T theData){
 			this(theData, null, null);
@@ -264,10 +208,6 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 			left = leftChild;
 			right = rightChild;
 			color = BLACK;
-		}
-		
-		public T getItem(){
-			return item;
 		}
 		
 	}
