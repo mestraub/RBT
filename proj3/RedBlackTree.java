@@ -112,14 +112,14 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 		if (parent.color == RED){ // need to rotate
 			grandParent.color = RED;
 			
-			if ((compare(thing, grandParent) < 0) != (compare(thing, parent) < 0)){
+			if ((compare(thing, grandParent) < 0) != (compare(thing, parent) < 0))
 				parent = rotate(thing, grandParent); //start double rotate
-				current = rotate(thing, greatGrandParent);
-				current.color = BLACK;
-			}
 			
-			pointer.right.color = BLACK; // makes root black
+			current = rotate(thing, greatGrandParent);
+			current.color = BLACK;
 		}
+		
+		pointer.right.color = BLACK; // makes root black
 	}
 	
 	private RedBlackNode<T> rotate(T thing, RedBlackNode<T> parent){
@@ -155,7 +155,7 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 	private RedBlackNode<T> rotateWithRightChild(RedBlackNode<T> node1){
 		RedBlackNode<T> node2 = node1.right;
 		node1.right = node2.left;
-		node2.left = node2;
+		node2.left = node1;
 		return node2;
 	}
 	
@@ -163,15 +163,16 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 	public void printTree(){
 		if(isEmpty())
 			System.out.println("This tree has no nodes");
-		else
+		else{
 			printTree(pointer.right);
+		}
 	}
 	
 	//internal method to print subtree in inroder
 	private void printTree(RedBlackNode<T> x){
 		if(x != nullNode){
 			printTree(x.left);
-			System.out.println(x.item);
+			System.out.println(x.item.toString());
 			printTree(x.right);
 		}
 	}
@@ -180,8 +181,25 @@ public class RedBlackTree <T extends Comparable<? super T>>{
 	public void printRoot(){
 		if(isEmpty())
 			System.out.println("The tree is empty.");
-		else
-			System.out.println(pointer.right.item);
+		else{
+			String str = pointer.right.item.toString();
+			str = str.replaceAll("\\n", " ");
+			
+			//splits the string so it can be printed
+			String [] s = str.split(" ");
+			int count = 0;
+			System.out.println(s[0] + " " + s[1] + " --> The heap contains: ");
+			for (int i = 2; i < s.length; i++){
+				System.out.print(s[i] + " ");
+				count++;
+				
+				if(count == 3){
+					System.out.print("\n");
+					count = 0;
+				}
+			}
+			//System.out.print("\n");
+		}
 	}
 	
 	//prints the root of the tree

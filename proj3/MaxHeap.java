@@ -40,15 +40,18 @@ public class MaxHeap <T extends Comparable<? super T>>{
 		if(isEmpty()){
 			position = size;
 			array[position] = x;
+			size++;
 		}else{
 
 		//move up
-		size++;
-		position = size;
-		for (; position > 0 && x.compareTo(array[position/2]) > 0; position /=2)
-			array[position] = array[position/2];
 		
-		array[position] = x;
+		position = size;
+		for (; position > 0 && x.compareTo(array[position/2]) > 0; position /=2){
+			array[position] = array[position/2];
+		}
+		
+		array[position] = x;	
+		size++;
 		}
 	}
 	
@@ -106,19 +109,18 @@ public class MaxHeap <T extends Comparable<? super T>>{
 	}
 	
 	//custom toString to print heap in an array
-	/*
+	
 	public String toString(){
-		
-		String str = "\n";
-		
+		String str = " ";
 		for (int i = 0; i < size; i++){
 			str += "[" + (i + 1) + "]" + array[i].toString() + "\n";
 		}
 		return str;
-	}*/
+	}
+	/*
 	public String toString(){
 		return Arrays.toString(array);
-	}
+	}*/
 	
 	//moves down the heap
 	private void bubbleDown(int position){
@@ -126,15 +128,15 @@ public class MaxHeap <T extends Comparable<? super T>>{
 		
 		T temp = array[position];
 		
-		for(; position * 2 < size; position = child){
+		for(; position * 2 <= size; position = child){
 			child = position * 2;
 			
-			if(child != size && array[child+1].compareTo(array[child]) > 0 )
+			if(child != size && array[child+1].compareTo(array[child]) < 0 )
 				child++;
-			if(array[child].compareTo(temp) > 0)
+			if(array[child].compareTo(temp) < 0)
 				array[position] = array[child];
 			else
-				;
+				break;
 		}	
 		array[position] = temp;
 	}

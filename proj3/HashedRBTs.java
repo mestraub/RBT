@@ -4,6 +4,22 @@
  * retreiveHashedRBTat
  * 
  */
+
+/*
+ * diff checker says things are out of order in input 1
+ * lacking space so its [1] Node
+ * 
+ * input 3 some heaps words are out of order, nodes 2/3 are swapped in heap MUST FIX ASAP
+ * 
+ * 
+ * FIX:
+ * printing root
+ * printing tree
+ * 
+ * WHAT WORKS:
+ * immediate printing
+ * 
+ */
 package proj3;
 
 import java.io.File;
@@ -72,8 +88,6 @@ public class HashedRBTs <T>{
 				
 					n = new Node(word, frequency);
 					p = new Partial(n);
-					
-					//System.out.println(" n node in file " + n + "\n");
 
 					if(letter - 65 >= 0 && letter - 65 <= 25){		
 						index = letter - 65;
@@ -82,21 +96,13 @@ public class HashedRBTs <T>{
 							
 							table.get(index).insert(p);
 							
-							//System.out.println("p partial in file " + p + "\n");
-							//System.out.println("p partial in file, getting word: " + p.getWord() + "\n");
-							
 						}else if (!table.get(index).isEmpty() && table.get(index).contains(p)){
 							
 							table.get(index).findNode(p).insertNodeIntoHeap(n);
-							
-							//System.out.println("p partial in file contains " + p + "\n");
-							//System.out.println("p partial in file contains, getting word: " + p.getWord() + "\n");
+
 						}else {
 							
 							table.get(index).insert(p);
-							
-							//System.out.println("p partial in file else " + p + "\n");
-							//System.out.println("p partial in file else, getting word: " + p.getWord() + "\n");
 						}
 
 					}
@@ -108,27 +114,16 @@ public class HashedRBTs <T>{
 							
 							table.get(index).insert(p);
 							
-							//System.out.println("p partial in file " + p + "\n");
-							//System.out.println("p partial in file, getting word: " + p.getWord() + "\n");
-							
 						}else if (!table.get(index).isEmpty() && table.get(index).contains(p)){
 							
 							table.get(index).findNode(p).insertNodeIntoHeap(n);
-							
-							//System.out.println("p partial in file contains " + p + "\n");
-							//System.out.println("p partial in file contains, getting word: " + p.getWord() + "\n");
+
 						}else {
 							
 							table.get(index).insert(p);
-							
-							//System.out.println("p partial in file else " + p + "\n");
-							//System.out.println("p partial in file else, getting word: " + p.getWord() + "\n");
+
 						}
-						//table.get(index).contains(p, n);
-						//p.printImmediateOptions();
-					//	table.get(index).insert(p);
 					}
-					
 				}				
 			}
 			scanFile.close();		
@@ -137,10 +132,6 @@ public class HashedRBTs <T>{
 			System.out.println("File not found.");
 			e.printStackTrace();
 		}// end catch
-		/*
-		for(int i = 0; i < table.size(); i++)
-			table.get(i).printTree();
-			*/
 	}
 	
 	/**
@@ -158,22 +149,26 @@ public class HashedRBTs <T>{
 	public void printHashCountResults(){
 		
 		for(int i = 0; i < table.size(); i++){
-			//System.out.println(i);
-			//System.out.println(i);
-			//table.get(i).printRoot();
-			//System.out.println("");
 			
 			if (table.get(i).getRoot() != null){
-				String str = table.get(i).getRoot().toString();
-				str.replaceAll("\\n", " ");
-				System.out.print("This tree starts with " + str + "--> The heap contains:\n");
 				
-				table.get(i).printTree();
+				System.out.print("This tree starts with ");
+				table.get(i).printRoot();
+				//table.get(i).printTree();
+				/*
+				String str = table.get(i).getRoot().toString();
+				str = str.replaceAll("\\n", " ");
+				
+				//splits the string so it can be printed
+				String [] s = str.split(" ");
+				
+				System.out.print("This tree starts with " + s[0] + " "+ s[1] + " --> The heap contains:\n");
+				System.out.println(s[2] + " " + s[3] + " "+ s[4]);
+				*/
+			//	table.get(i).printTree();
 			}	
 			else
 				System.out.println("This tree has no nodes");
 		}
-	}
-	
-	
+	}	
 }
